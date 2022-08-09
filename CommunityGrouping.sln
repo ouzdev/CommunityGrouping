@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityGrouping.Data", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityGrouping.Core", "src\CommunityGrouping.Core\CommunityGrouping.Core.csproj", "{B413668C-0B6E-4914-8D4C-7F6D5AD295CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityGrouping.WebAPI", "src\CommunityGrouping.WebAPI\CommunityGrouping.WebAPI.csproj", "{D332FC14-ABEB-4220-A856-4F2172AFCB42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityGrouping.API", "src\CommunityGrouping.WebAPI\CommunityGrouping.API.csproj", "{D332FC14-ABEB-4220-A856-4F2172AFCB42}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityGrouping.Tests", "tests\CommunityGrouping.Tests\CommunityGrouping.Tests.csproj", "{81F9D43F-7440-411D-B36E-813E354E194A}"
 EndProject

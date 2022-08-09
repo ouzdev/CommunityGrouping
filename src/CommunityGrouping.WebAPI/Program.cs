@@ -1,5 +1,8 @@
+using CommunityGrouping.WebAPI.Extension.StartupExtension;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContextDependencyInjection(builder);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

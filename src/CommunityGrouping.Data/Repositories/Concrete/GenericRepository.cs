@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using CommunityGrouping.Core;
 using CommunityGrouping.Core.BaseModel;
 using CommunityGrouping.Data.Context.EntityFramework;
 using CommunityGrouping.Data.Repositories.Abstract;

@@ -1,12 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CommunityGrouping.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommunityGrouping.Data.Context.EntityFramework
 {
-    public class AppDbContext:DbContext
+    public class AppDbContext : DbContext
     {
-        public AppDbContext()
+        public AppDbContext(DbContextOptions options) : base(options)
         {
-            
         }
+
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

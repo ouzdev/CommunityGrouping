@@ -1,30 +1,28 @@
-﻿using JWTAuth.Core;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
+﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
+using CommunityGrouping.Core.BaseModel;
+using Microsoft.Extensions.Options;
 
-namespace JWTAuth.Core
+namespace CommunityGrouping.Core
 {
     public class JwtHelper : ITokenHelper
     {
 
-        private IOptions<TokenOptions> _tokenOptions;
+        private readonly IOptions<TokenOptions> _tokenOptions;
 
         private DateTime _accessTokenExpiration;
         public JwtHelper(IOptions<TokenOptions> tokenOptions)
         {
             _tokenOptions = tokenOptions;
         }
-        public AccessToken CreateToken(User user)
+        public AccessToken CreateToken(User applicationUser)
         {
             _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.Value.AccessTokenExpiration);
             var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.Value.SecurityKey);
             var signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey);
-            var jwt = CreateJwtSecurityToken(_tokenOptions.Value, user, signingCredentials);
+            var jwt = CreateJwtSecurityToken(_tokenOptions.Value, applicationUser, signingCredentials);
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var token = jwtSecurityTokenHandler.WriteToken(jwt);
 
@@ -63,8 +61,6 @@ namespace JWTAuth.Core
         {
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
-            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-            claims.Add(new Claim("AccountId", user.Id.ToString()));
             return claims;
         }
     }
