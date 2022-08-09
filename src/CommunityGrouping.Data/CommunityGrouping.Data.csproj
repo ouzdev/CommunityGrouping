@@ -7,10 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Context\EntityFramework\" />
-    <Folder Include="Repositories\Abstract\" />
-    <Folder Include="Repositories\Concrete\" />
-    <Folder Include="Repositories\UnıtOfWork\" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CommunityGrouping.Core\CommunityGrouping.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,12 @@
-﻿
-namespace CommunityGrouping.Core.Extensions
+﻿using CommunityGrouping.Core.BaseModel;
+using Microsoft.AspNetCore.WebUtilities;
+
+namespace CommunityGrouping.Core.Utilities.URI
 {
-    public class RelatePaginationUri : IRelatePaginationUri
+    public class PaginationUriService : IPaginationUriService
     {
         private readonly string _baseUri;
-        public RelatePaginationUri(string baseUri)
+        public PaginationUriService(string baseUri)
         {
             _baseUri = baseUri;
         }
