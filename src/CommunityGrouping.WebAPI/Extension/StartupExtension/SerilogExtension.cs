@@ -1,4 +1,6 @@
-﻿namespace CommunityGrouping.API.Extension.StartupExtension
+﻿using Serilog;
+
+namespace CommunityGrouping.API.Extension.StartupExtension
 {
     public static class SerilogExtension
     {
