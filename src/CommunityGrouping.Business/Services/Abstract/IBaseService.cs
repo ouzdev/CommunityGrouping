@@ -8,12 +8,12 @@ using CommunityGrouping.Core.BaseModel;
 
 namespace CommunityGrouping.Business.Services.Abstract
 {
-    public interface IBaseService<TReadDto,TWriteDto,TEntity>
+    public interface IBaseService<TDto,TEntity>
     {
-        Task<IDataResult<TReadDto>> GetByIdAsync(int id);
-        Task<IDataResult<IEnumerable<TReadDto>>> GetAllAsync();
-        Task<IDataResult<TReadDto>> InsertAsync(TWriteDto insertResource);
-        Task<IDataResult<TReadDto>> UpdateAsync(int id, TWriteDto updateResource);
-        Task<IDataResult<TReadDto>> RemoveAsync(int id);
+        Task<IDataResult<TDto>> GetByIdAsync(int id);
+        Task<IDataResult<IEnumerable<TDto>>> GetAllAsync();
+        Task<IDataResult<TDto>> InsertAsync(TDto insertResource);
+        Task<IDataResult<TDto>> UpdateAsync(int id, TDto updateResource);
+        Task<IDataResult<TDto>> RemoveAsync(int id);
     }
 }

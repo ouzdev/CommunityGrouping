@@ -3,8 +3,7 @@ using CommunityGrouping.Entities.Dto;
 
 namespace CommunityGrouping.Business.Services.Abstract
 {
-    public interface ICommunityGroupService:IBaseService<CommunityGroupDto, CommunityGroup>
+    public interface IOccupationService:IBaseService<OccupationDto,Occupation>
     {
-      
     }
 }

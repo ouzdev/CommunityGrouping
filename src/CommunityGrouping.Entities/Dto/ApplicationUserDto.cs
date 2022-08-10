@@ -1,6 +1,6 @@
 ﻿using CommunityGrouping.Core.BaseModel;
 
-namespace CommunityGrouping.Entities.Dto.ApplicationUser
+namespace CommunityGrouping.Entities.Dto
 {
     public class ApplicationUserDto : IDto
     {

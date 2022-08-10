@@ -1,7 +1,5 @@
 ﻿using CommunityGrouping.Core;
 using CommunityGrouping.Entities.Dto;
-using CommunityGrouping.Entities.Dto.ApplicationUser;
-
 namespace CommunityGrouping.Business.Services.Abstract
 {
     public interface IAuthService

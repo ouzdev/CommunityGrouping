@@ -1,10 +1,11 @@
 ﻿using CommunityGrouping.Entities;
-using CommunityGrouping.Entities.Dto.Person;
+using CommunityGrouping.Entities.Dto;
+
 
 
 namespace CommunityGrouping.Business.Services.Abstract
 {
-    public interface IPersonService:IBaseService<PersonReadDto,PersonWriteDto,Person>
+    public interface IPersonService:IBaseService<PersonDto,Person>
     {
         
     }

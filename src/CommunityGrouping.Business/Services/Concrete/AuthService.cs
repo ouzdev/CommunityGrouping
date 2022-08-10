@@ -6,7 +6,6 @@ using CommunityGrouping.Core.Utilities.Security.Hashing;
 using CommunityGrouping.Data.Repositories.UnitOfWork;
 using CommunityGrouping.Entities;
 using CommunityGrouping.Entities.Dto;
-using CommunityGrouping.Entities.Dto.ApplicationUser;
 
 namespace CommunityGrouping.Business.Services.Concrete
 {

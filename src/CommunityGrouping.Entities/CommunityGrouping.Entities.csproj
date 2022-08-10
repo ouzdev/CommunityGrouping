@@ -10,9 +10,4 @@
     <ProjectReference Include="..\CommunityGrouping.Core\CommunityGrouping.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dto\CommunityGroup\" />
-    <Folder Include="Dto\Occupation\" />
-  </ItemGroup>
-
 </Project>

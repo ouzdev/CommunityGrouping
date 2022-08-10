@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CommunityGrouping.Entities;
 using CommunityGrouping.Entities.Dto;
-using CommunityGrouping.Entities.Dto.ApplicationUser;
 
 namespace CommunityGrouping.Business.Mapper
 {

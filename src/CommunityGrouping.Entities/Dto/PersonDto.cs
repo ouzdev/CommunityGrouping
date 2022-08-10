@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityGrouping.Core.BaseModel;
+﻿using CommunityGrouping.Core.BaseModel;
 
-namespace CommunityGrouping.Entities.Dto.Person
+namespace CommunityGrouping.Entities.Dto
 {
-    public class PersonReadDto:IDto
+    public class PersonDto:IDto
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CommunityGrouping.Business.Services.Abstract;
 using CommunityGrouping.Data.Repositories.Abstract;
+using CommunityGrouping.Data.Repositories.Concrete;
 using CommunityGrouping.Data.Repositories.UnitOfWork;
 using CommunityGrouping.Entities;
 using CommunityGrouping.Entities.Dto;
 
 namespace CommunityGrouping.Business.Services.Concrete
 {
-    public class CommunityGroupService:BaseService<CommunityGroupDto, CommunityGroup>,ICommunityGroupService
+    public class OccupationService : BaseService<OccupationDto, Occupation>, IOccupationService
     {
-        public CommunityGroupService(ICommunityGroupRepository communityGroupRepository, IMapper mapper, IUnitOfWork unitOfWork) : base(communityGroupRepository, mapper, unitOfWork)
+        public OccupationService(OccupationRepository occupationRepository, IMapper mapper, IUnitOfWork unitOfWork) : base(occupationRepository, mapper, unitOfWork)
         {
         }
     }
+    
+    
 }
