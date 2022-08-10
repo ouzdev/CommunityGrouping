@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ValidationRules\FluentValidation\" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="FluentValidation" Version="11.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CommunityGrouping.Core\CommunityGrouping.Core.csproj" />
+    <ProjectReference Include="..\CommunityGrouping.Data\CommunityGrouping.Data.csproj" />
+    <ProjectReference Include="..\CommunityGrouping.Entities\CommunityGrouping.Entities.csproj" />
   </ItemGroup>
 
 </Project>

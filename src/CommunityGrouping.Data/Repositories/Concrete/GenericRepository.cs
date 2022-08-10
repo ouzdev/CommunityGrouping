@@ -17,6 +17,20 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         _entities = Context.Set<TEntity>();
     }
 
+    public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>>? filter = null)
+    {
+        if (filter != null)
+            return await _entities.SingleOrDefaultAsync(filter);
+
+        return await _entities.SingleOrDefaultAsync();
+    }
+
+
+    public async Task<TEntity?> GetByIdAsync(int entityId)
+    {
+        return await _entities.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entityId);
+    }
+
     public async Task AddAsync(TEntity entity)
     {
         await _entities.AddAsync(entity);
@@ -27,10 +41,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         _entities.Remove(entity);
     }
 
-    public async Task<TEntity?> GetAsync(Expression<Func<TEntity?, bool>>? filter = null)
-    {
-        return await _entities.AsNoTracking().Where(filter).FirstOrDefaultAsync();
-    }
 
     public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null)
     {

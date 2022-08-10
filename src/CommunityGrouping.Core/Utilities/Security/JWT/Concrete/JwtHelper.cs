@@ -29,8 +29,8 @@ namespace CommunityGrouping.Core
             return new AccessToken
             {
                 Token = token,
-                Expiration = _accessTokenExpiration,
-                RefreshToken = CreateRefreshToken()
+                Expiration = _accessTokenExpiration
+
             };
 
         }
@@ -47,15 +47,7 @@ namespace CommunityGrouping.Core
             );
             return jwt;
         }
-        public string CreateRefreshToken()
-        {
-            byte[] number = new byte[32];
-            using (RandomNumberGenerator random = RandomNumberGenerator.Create())
-            {
-                random.GetBytes(number);
-                return Convert.ToBase64String(number);
-            }
-        }
+       
 
         private IEnumerable<Claim> SetClaims(User user)
         {

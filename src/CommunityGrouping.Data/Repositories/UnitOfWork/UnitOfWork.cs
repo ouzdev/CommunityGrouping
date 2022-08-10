@@ -1,30 +1,37 @@
 ﻿using CommunityGrouping.Data.Context.EntityFramework;
+using EFCore.BulkExtensions;
 
 namespace CommunityGrouping.Data.Repositories.UnitOfWork;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly AppDbContext dbContext;
-    public bool disposed;
+    private readonly AppDbContext _dbContext;
+    public bool Disposed;
 
     public UnitOfWork(AppDbContext dbContext)
     {
-        this.dbContext = dbContext;
+        this._dbContext = dbContext;
     }
     public async Task CompleteAsync()
     {
-        await dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
+
+    public async Task BulkCompleteAsync()
+    {
+        await _dbContext.BulkSaveChangesAsync();
+    }
+
     protected virtual void Clean(bool disposing)
     {
-        if (!this.disposed)
+        if (!this.Disposed)
         {
             if (disposing)
             {
-                dbContext.Dispose();
+                _dbContext.Dispose();
             }
         }
-        this.disposed = true;
+        this.Disposed = true;
     }
     public void Dispose()
     {

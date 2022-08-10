@@ -10,7 +10,7 @@ namespace CommunityGrouping.Core.Utilities.Security.Hashing
         /// <param name="password"></param>
         /// <param name="passwordHash"></param>
         /// <param name="passwordSalt"></param>
-        public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        public static void CreatePasswordHash(string password, out byte[]? passwordHash, out byte[]? passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
@@ -26,7 +26,7 @@ namespace CommunityGrouping.Core.Utilities.Security.Hashing
         /// <param name="passwordSalt"></param>
         /// <returns></returns>
 
-        public static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        public static bool VerifyPasswordHash(string password, byte[]? passwordHash, byte[]? passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
