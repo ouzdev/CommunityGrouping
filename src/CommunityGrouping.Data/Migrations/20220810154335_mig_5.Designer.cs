@@ -3,6 +3,7 @@ using System;
 using CommunityGrouping.Data.Context.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommunityGrouping.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220810154335_mig_5")]
+    partial class mig_5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,6 +34,10 @@ namespace CommunityGrouping.Data.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
@@ -60,6 +66,8 @@ namespace CommunityGrouping.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ApplicationUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
                 });
 
             modelBuilder.Entity("CommunityGrouping.Entities.CommunityGroup", b =>
@@ -113,16 +121,12 @@ namespace CommunityGrouping.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Occupations");
+                    b.ToTable("Occupation");
                 });
 
             modelBuilder.Entity("CommunityGrouping.Entities.Person", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.HasBaseType("CommunityGrouping.Entities.ApplicationUser");
 
                     b.Property<int>("ApplicationUserId")
                         .HasColumnType("integer");
@@ -133,24 +137,6 @@ namespace CommunityGrouping.Data.Migrations
                     b.Property<int?>("CommunityGroupId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("OccupationId")
                         .HasColumnType("integer");
 
@@ -158,15 +144,13 @@ namespace CommunityGrouping.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
-
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("CommunityGroupId");
 
                     b.HasIndex("OccupationId");
 
-                    b.ToTable("People");
+                    b.HasDiscriminator().HasValue("Person");
                 });
 
             modelBuilder.Entity("CommunityGrouping.Entities.Person", b =>

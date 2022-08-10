@@ -1,9 +1,8 @@
-﻿
-using CommunityGrouping.Core.BaseModel;
+﻿using CommunityGrouping.Core.BaseModel;
 
-namespace CommunityGrouping.Entities.Dto
+namespace CommunityGrouping.Entities.Dto.ApplicationUser
 {
-    public class ApplicationUserReadDto : IDto
+    public class ApplicationUserDto : IDto
     {
         public int Id { get; set; }
         public string Email { get; set; }

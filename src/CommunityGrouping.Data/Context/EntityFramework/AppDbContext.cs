@@ -9,6 +9,13 @@ namespace CommunityGrouping.Data.Context.EntityFramework
         {
         }
 
+
+
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Person> People { get; set; }
+        public DbSet<Occupation> Occupations { get; set; }
+        public DbSet<CommunityGroup> CommunityGroups { get; set; }
+
+
     }
 }

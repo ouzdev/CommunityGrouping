@@ -17,5 +17,10 @@
         public static string USER_ALREADY_EXISTS = "Kullanıcı Zaten Mevcut";
         public static string SUCCESS_TRANSACTION = "İşlem Başarılı";
 
+        public static string PERSON_ADDED = "Kişi Eklendi";
+        public static string ID_NOT_EXISTENT = "Id Bulunamadı";
+        public static string DELETE_ERROR = "Silme Hatası";
+        public static string UPDATE_ERROR = "Güncelleme Hatası";
+        public static string ADD_ERROR = "Ekleme Hatası";
     }
 }

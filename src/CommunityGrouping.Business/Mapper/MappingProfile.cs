@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CommunityGrouping.Entities;
 using CommunityGrouping.Entities.Dto;
+using CommunityGrouping.Entities.Dto.ApplicationUser;
 
 namespace CommunityGrouping.Business.Mapper
 {
@@ -9,7 +10,7 @@ namespace CommunityGrouping.Business.Mapper
         public MappingProfile()
         {
             CreateMap<UserForRegisterDto, ApplicationUser>().ReverseMap();
-            CreateMap<ApplicationUserReadDto, ApplicationUser>().ReverseMap();
+            CreateMap<ApplicationUserDto, ApplicationUser>().ReverseMap();
         }
     }
 }

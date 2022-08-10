@@ -6,6 +6,7 @@ using CommunityGrouping.Core.Utilities.Security.Hashing;
 using CommunityGrouping.Data.Repositories.UnitOfWork;
 using CommunityGrouping.Entities;
 using CommunityGrouping.Entities.Dto;
+using CommunityGrouping.Entities.Dto.ApplicationUser;
 
 namespace CommunityGrouping.Business.Services.Concrete
 {
@@ -38,10 +39,10 @@ namespace CommunityGrouping.Business.Services.Concrete
             user.ModifiedDate = DateTime.UtcNow;
             var result = _applicationUserService.Update(user);
             await _unitOfWork.CompleteAsync();
-            var response = _mapper.Map<ApplicationUserReadDto>(user);
+            var response = _mapper.Map<ApplicationUserDto>(user);
             if (result.Success)
             {
-                return new SuccessDataResult<ApplicationUserReadDto>(response, Messages.CHANGE_PASSWORD_SUCCESS);
+                return new SuccessDataResult<ApplicationUserDto>(response, Messages.CHANGE_PASSWORD_SUCCESS);
 
             }
             return new ErrorResult(Messages.CHANGE_PASSWORD_ERROR);
@@ -83,7 +84,7 @@ namespace CommunityGrouping.Business.Services.Concrete
             return new ErrorDataResult<AccessToken>(Messages.SYSTEM_ERROR);
 
         }
-        public async Task<IDataResult<ApplicationUserReadDto>> Register(UserForRegisterDto userForRegisterDto)
+        public async Task<IDataResult<ApplicationUserDto>> Register(UserForRegisterDto userForRegisterDto)
         {
             var userExist = await UserExists(userForRegisterDto.Email);
             if (userExist.Success)
@@ -96,10 +97,10 @@ namespace CommunityGrouping.Business.Services.Concrete
                 user.CreatedAt = DateTime.UtcNow;
                 user.ModifiedDate = DateTime.UtcNow;
                 await _applicationUserService.AddAsync(user);
-                return new SuccessDataResult<ApplicationUserReadDto>(_mapper.Map<ApplicationUserReadDto>(user), Messages.REGISTER_USER);
+                return new SuccessDataResult<ApplicationUserDto>(_mapper.Map<ApplicationUserDto>(user), Messages.REGISTER_USER);
             }
 
-            return new ErrorDataResult<ApplicationUserReadDto>(Messages.USER_ALREADY_EXISTS);
+            return new ErrorDataResult<ApplicationUserDto>(Messages.USER_ALREADY_EXISTS);
 
         }
     }
