@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityGrouping.Business", "src\CommunityGrouping.Business\CommunityGrouping.Business.csproj", "{2A5753CE-570F-4B3C-8934-508E1C22DB6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityGrouping.Business", "src\CommunityGrouping.Business\CommunityGrouping.Business.csproj", "{2A5753CE-570F-4B3C-8934-508E1C22DB6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{700FFAA3-5242-4F42-8F82-4D1DDEAC4BD0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4A8EB13F-60BD-4ED0-BBF5-9D01ABEF8A6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityGrouping.Entities", "src\CommunityGrouping.Entities\CommunityGrouping.Entities.csproj", "{F6BA9EB1-C957-450C-8B69-693096DAF0E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityGrouping.Entities", "src\CommunityGrouping.Entities\CommunityGrouping.Entities.csproj", "{F6BA9EB1-C957-450C-8B69-693096DAF0E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityGrouping.Data", "src\CommunityGrouping.Data\CommunityGrouping.Data.csproj", "{C1EAB105-4AAC-43BE-9243-B31BA4A0D289}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityGrouping.Data", "src\CommunityGrouping.Data\CommunityGrouping.Data.csproj", "{C1EAB105-4AAC-43BE-9243-B31BA4A0D289}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityGrouping.Core", "src\CommunityGrouping.Core\CommunityGrouping.Core.csproj", "{B413668C-0B6E-4914-8D4C-7F6D5AD295CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityGrouping.Core", "src\CommunityGrouping.Core\CommunityGrouping.Core.csproj", "{B413668C-0B6E-4914-8D4C-7F6D5AD295CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityGrouping.API", "src\CommunityGrouping.WebAPI\CommunityGrouping.API.csproj", "{D332FC14-ABEB-4220-A856-4F2172AFCB42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityGrouping.API", "src\CommunityGrouping.WebAPI\CommunityGrouping.API.csproj", "{D332FC14-ABEB-4220-A856-4F2172AFCB42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityGrouping.Tests", "tests\CommunityGrouping.Tests\CommunityGrouping.Tests.csproj", "{81F9D43F-7440-411D-B36E-813E354E194A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityGrouping.Tests", "tests\CommunityGrouping.Tests\CommunityGrouping.Tests.csproj", "{81F9D43F-7440-411D-B36E-813E354E194A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

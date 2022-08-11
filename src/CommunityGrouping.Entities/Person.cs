@@ -7,10 +7,10 @@ namespace CommunityGrouping.Entities
         public string FirstName { get; set; }
         public string LastName  { get; set; }
         public string Email { get; set; }
-        public DateTime Birthday { get; set; }
-        public string PhoneNumber { get; set; }
+        public DateTime? Birthday { get; set; }
+        public string? PhoneNumber { get; set; }
         public int ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
-        public int OccupationId { get; set; }
+        public virtual ICollection<CommunityGroup> CommunityGroups { get; set; }
     }
 }

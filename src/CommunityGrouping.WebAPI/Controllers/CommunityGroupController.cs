@@ -42,7 +42,18 @@ namespace CommunityGrouping.API.Controllers
 
             return NotFound(result);
         }
+        [HttpPost("AddPersonCommunityGroup")]
+        public async Task<IActionResult> AddPersonCommunityGroup([FromBody] PersonCommunityGroupDto personCommunityGroupDto)
+        {
+            var result = await _communityGroupService.AddPersonCommunityGroupAsync(personCommunityGroupDto);
+            if (result.Success)
+            {
+                return Ok(result);
 
+            }
+
+            return NotFound(result);
+        }
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CommunityGroupDto communityGroupDto)
         {
@@ -79,5 +90,10 @@ namespace CommunityGrouping.API.Controllers
             }
             return BadRequest(result);            
         }
+    }
+
+    public class PersonCommunityGroupDto
+    {
+        
     }
 }

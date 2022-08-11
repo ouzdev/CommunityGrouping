@@ -9,7 +9,6 @@ public class PersonDtoValidator : AbstractValidator<PersonDto>
     {
         RuleFor(request => request.FirstName).NotEmpty();
         RuleFor(request => request.LastName).NotEmpty();
-        RuleFor(request => request.OccupationId).NotEmpty();
         RuleFor(request => request.Email).NotEmpty().EmailAddress();
     }
 }

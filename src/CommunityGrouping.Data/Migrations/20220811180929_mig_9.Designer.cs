@@ -3,6 +3,7 @@ using System;
 using CommunityGrouping.Data.Context.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommunityGrouping.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220811180929_mig_9")]
+    partial class mig_9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,7 +135,7 @@ namespace CommunityGrouping.Data.Migrations
                     b.Property<int>("ApplicationUserId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("Birthday")
+                    b.Property<DateTime>("Birthday")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("CommunityGroupId")
@@ -168,6 +170,7 @@ namespace CommunityGrouping.Data.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");

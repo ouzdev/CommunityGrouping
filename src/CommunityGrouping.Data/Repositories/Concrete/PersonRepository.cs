@@ -1,5 +1,4 @@
-﻿
-using CommunityGrouping.Core.BaseModel;
+﻿using CommunityGrouping.Core.BaseModel;
 using CommunityGrouping.Core.Extensions;
 using CommunityGrouping.Data.Context.EntityFramework;
 using CommunityGrouping.Data.Repositories.Abstract;

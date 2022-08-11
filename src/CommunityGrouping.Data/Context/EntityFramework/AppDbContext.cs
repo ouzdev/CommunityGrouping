@@ -1,4 +1,5 @@
-﻿using CommunityGrouping.Entities;
+﻿using CommunityGrouping.Core.BaseModel;
+using CommunityGrouping.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommunityGrouping.Data.Context.EntityFramework
@@ -23,6 +24,25 @@ namespace CommunityGrouping.Data.Context.EntityFramework
         public DbSet<Occupation> Occupations { get; set; }
         public DbSet<CommunityGroup> CommunityGroups { get; set; }
 
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            var entries = ChangeTracker
+                .Entries()
+                .Where(e => e.Entity is BaseEntity && (
+                    e.State == EntityState.Added
+                    || e.State == EntityState.Modified));
 
+            foreach (var entityEntry in entries)
+            {
+                ((BaseEntity)entityEntry.Entity).ModifiedDate = DateTime.UtcNow;
+
+                if (entityEntry.State == EntityState.Added)
+                {
+                    ((BaseEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
+                }
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
     }
 }

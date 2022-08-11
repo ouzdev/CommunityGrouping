@@ -92,7 +92,7 @@ namespace CommunityGrouping.Business.Services.Concrete
                 if (tempEntity is null)
                     return new ErrorDataResult<TDto>(Messages.ID_NOT_EXISTENT);
                 tempEntity = Mapper.Map(updateResource, tempEntity);
-                
+                    
                 await UnitOfWork.CompleteAsync();
 
                 var resource = Mapper.Map<TEntity, TDto>(tempEntity);
