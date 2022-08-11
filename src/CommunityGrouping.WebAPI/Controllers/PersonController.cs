@@ -20,7 +20,7 @@ namespace CommunityGrouping.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPaginationAsync([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public async Task<IActionResult> GetPaginationAsync([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] PersonFilter filter)
         {
 
             var route = Request.Path.Value;
