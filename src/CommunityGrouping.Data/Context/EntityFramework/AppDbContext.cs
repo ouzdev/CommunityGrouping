@@ -10,6 +10,13 @@ namespace CommunityGrouping.Data.Context.EntityFramework
         }
 
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Person>(entity =>
+            {
+                entity.HasIndex(e => e.Email).IsUnique();
+            });
+        }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Person> People { get; set; }

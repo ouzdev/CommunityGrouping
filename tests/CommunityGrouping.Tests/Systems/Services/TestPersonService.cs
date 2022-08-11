@@ -46,7 +46,7 @@ namespace CommunityGrouping.Tests.Systems.Services
                 FirstName = "Oğuzcan",
                 LastName = "Genç",
                 Email = "testmail@test.com",
-                Birthday = DateTime.UtcNow,
+                BirthDay = DateTime.UtcNow,
                 PhoneNumber = "05511363566",
             });
 

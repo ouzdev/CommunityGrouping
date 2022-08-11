@@ -1,30 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFilterer.Attributes;
-using AutoFilterer.Enums;
-using AutoFilterer.Types;
-using CommunityGrouping.Entities;
-using CommunityGrouping.Entities.Dto;
-
-namespace CommunityGrouping.Business.Filters
+﻿namespace CommunityGrouping.Business.Filters
 {
-    /// <summary>
-    /// Search in **FirstName**, **LastName**.
-    /// </summary>
     public class PersonFilter
     {
-        public string Search { get; set; }
-        [Required] public FuelTypeEnum FuelType { get; set; }
+        public string FirstName  { get; set; }
+        public string LastName { get; set; }
 
+        public SortOrder SortOrder { get; set; }
     }
 
-    public enum FuelTypeEnum
+    public enum SortOrder
     {
-        Solid,
-        Liquid
+        Ascending = 0,
+        Descending = 1
     }
 }

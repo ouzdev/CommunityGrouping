@@ -1,24 +1,26 @@
 ﻿using CommunityGrouping.Business.Services.Abstract;
 using CommunityGrouping.Entities.Dto;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CommunityGrouping.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OccupationController : ControllerBase
+    public class CommunityGroupController : ControllerBase
     {
-        private readonly IOccupationService _occupationService;
-        public OccupationController(IOccupationService occupationService)
-        {
-            _occupationService = occupationService;
-        }
 
+        private readonly ICommunityGroupService _communityGroupService;
+        public CommunityGroupController(ICommunityGroupService communityGroupService)
+        {
+            _communityGroupService = communityGroupService;
+        }
+        
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = await _occupationService.GetAllAsync();
+            var result = await _communityGroupService.GetAllAsync();
             if (result.Success)
             {
                 return Ok(result);
@@ -31,7 +33,7 @@ namespace CommunityGrouping.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await _occupationService.GetByIdAsync(id);
+            var result = await _communityGroupService.GetByIdAsync(id);
             if (result.Success)
             {
                 return Ok(result);
@@ -40,12 +42,11 @@ namespace CommunityGrouping.API.Controllers
 
             return NotFound(result);
         }
-        [Authorize]
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] OccupationDto occupationDto)
+        public async Task<IActionResult> Post([FromBody] CommunityGroupDto communityGroupDto)
         {
-            var result = await _occupationService.InsertAsync(occupationDto);
+            var result = await _communityGroupService.InsertAsync(communityGroupDto);
             if (result.Success)
             {
                 return Ok(result);
@@ -54,12 +55,11 @@ namespace CommunityGrouping.API.Controllers
 
             return BadRequest(result);
         }
-        [Authorize]
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] OccupationDto occupationDto)
+        public async Task<IActionResult> Put(int id, [FromBody] CommunityGroupDto communityGroupDto)
         {
-            var result = await _occupationService.UpdateAsync(id,occupationDto);
+            var result = await _communityGroupService.UpdateAsync(id, communityGroupDto);
             if (result.Success)
             {
                 return Ok(result);
@@ -68,18 +68,16 @@ namespace CommunityGrouping.API.Controllers
 
             return BadRequest(result);
         }
-        [Authorize]
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _occupationService.RemoveAsync(id);
+            var result = await _communityGroupService.RemoveAsync(id);
             if (result.Success)
             {
                 return Ok(result);
-
             }
-            return BadRequest(result);
+            return BadRequest(result);            
         }
     }
 }

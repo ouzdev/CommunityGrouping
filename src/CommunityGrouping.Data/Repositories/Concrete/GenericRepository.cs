@@ -25,7 +25,10 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         return await _entities.SingleOrDefaultAsync();
     }
 
-
+    public async Task<int> TotalRecordAsync()
+    {
+        return await _entities.CountAsync();
+    }
     public async Task<TEntity?> GetByIdAsync(int entityId)
     {
         return await _entities.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entityId);

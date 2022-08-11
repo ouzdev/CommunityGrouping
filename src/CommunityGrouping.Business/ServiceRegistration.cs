@@ -18,7 +18,7 @@ namespace CommunityGrouping.Business
             services.AddScoped<IPersonService, PersonService>();
             
             services.AddScoped<IOccupationService, OccupationService>();
-
+            services.AddScoped<ICommunityGroupService, CommunityGroupService>();
 
             services.AddScoped<IAuthService, AuthService>();
 

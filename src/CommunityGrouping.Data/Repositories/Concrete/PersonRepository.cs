@@ -1,11 +1,11 @@
-﻿using AutoFilterer.Extensions;
-using CommunityGrouping.Business.Filters;
+﻿
 using CommunityGrouping.Core.BaseModel;
 using CommunityGrouping.Core.Extensions;
 using CommunityGrouping.Data.Context.EntityFramework;
 using CommunityGrouping.Data.Repositories.Abstract;
 using CommunityGrouping.Entities;
 using CommunityGrouping.Entities.Dto;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommunityGrouping.Data.Repositories.Concrete
@@ -33,6 +33,12 @@ namespace CommunityGrouping.Data.Repositories.Concrete
 
             return (records, total);
         }
+
+        public async Task InsertBulk(IList<Person> persons)
+        {
+             await _dbContext.BulkInsertAsync<Person>(persons);
+        }
+
         private IQueryable<Person> ConditionFilter(PersonDto filterResource)
         {
             var queryable = _dbContext.People.AsQueryable();
@@ -55,11 +61,6 @@ namespace CommunityGrouping.Data.Repositories.Concrete
 
             return queryable;
         }
-        public async Task<int> TotalRecordAsync()
-        {
-            return await _dbContext.People.CountAsync();
-        }
-
 
     }
 }

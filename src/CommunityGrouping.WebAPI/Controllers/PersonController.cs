@@ -48,17 +48,27 @@ namespace CommunityGrouping.API.Controllers
         }
 
         [Authorize]
-
-        //[HttpPost]
-        //public async Task<IActionResult> Post([FromBody] PersonDto personDto)
-        //{
-        //    var result = await _personService.InsertAsync(personDto);
-        //    if (result.Success)
-        //    {
-        //        return Ok(result);
-        //    }
-        //    return BadRequest(result);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] PersonDto personDto)
+        {
+            var result = await _personService.InsertAsync(personDto);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [Authorize]
+        [HttpPost("insertBulkOperation")]
+        public async Task<IActionResult> InsertBulkPerson([FromForm] IFormFile file)
+        {
+            var result = await _personService.InsertBulkPerson(file);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
+        }
         [Authorize]
 
         [HttpPut("{id}")]

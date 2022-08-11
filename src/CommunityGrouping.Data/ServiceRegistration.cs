@@ -12,6 +12,7 @@ namespace CommunityGrouping.Data
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<IOccupationRepository, OccupationRepository>();
+            services.AddScoped<ICommunityGroupRepository, CommunityGroupRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         }

@@ -1,7 +1,9 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using AutoMapper;
 using CommunityGrouping.Business.Constant;
 using CommunityGrouping.Business.Filters;
+using CommunityGrouping.Business.Mapper;
 using CommunityGrouping.Business.Services.Abstract;
 using CommunityGrouping.Core;
 using CommunityGrouping.Core.BaseModel;
@@ -11,6 +13,8 @@ using CommunityGrouping.Data.Repositories.Abstract;
 using CommunityGrouping.Data.Repositories.UnitOfWork;
 using CommunityGrouping.Entities;
 using CommunityGrouping.Entities.Dto;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
@@ -72,6 +76,29 @@ namespace CommunityGrouping.Business.Services.Concrete
             return resource;
 
         }
+
+        public async Task<IResult> InsertBulkPerson(IFormFile formFile)
+        {
+            try
+            {
+                using var reader = new StreamReader(formFile.OpenReadStream());
+                var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
+                var records = csvReader.GetRecords<PersonMap>();
+                var result = _mapper.Map<IList<Person>>(records);
+                foreach (var item in result)
+                {
+                    item.ApplicationUserId = base.CurrentUserId;
+                }
+                await _personRepository.InsertBulk(result);
+                await _unitOfWork.BulkCompleteAsync();
+                return new SuccessResult(Messages.RECORD_ADDED);
+            }
+            catch (Exception ex)
+            {
+                throw new MessageResultException(Messages.ADD_ERROR, ex);
+            }
+        }
+
         private PaginatedResult<IEnumerable<PersonDto>> GeneratePagination(PaginationFilter paginationFilter, string route, (IEnumerable<Person> records, int total) paginationPerson)
         {
             var tempResource = Mapper.Map<IEnumerable<Person>, IEnumerable<PersonDto>>(paginationPerson.records);
@@ -80,5 +107,4 @@ namespace CommunityGrouping.Business.Services.Concrete
             return resource;
         }
     }
-
 }

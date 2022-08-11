@@ -11,7 +11,7 @@ namespace CommunityGrouping.WebAPI.Extension.StartupExtension
             {
                 opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
         }
     }

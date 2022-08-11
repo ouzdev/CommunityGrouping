@@ -12,7 +12,5 @@ namespace CommunityGrouping.Entities
         public int ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
         public int OccupationId { get; set; }
-        public virtual Occupation Occupation { get; set; }
-
     }
 }
