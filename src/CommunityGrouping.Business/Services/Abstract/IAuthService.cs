@@ -6,7 +6,7 @@ namespace CommunityGrouping.Business.Services.Abstract
     {
         Task<IDataResult<ApplicationUserDto>> Register(UserForRegisterDto userForRegisterDto);
         Task<IResult> UserExists(string mail);
-        Task<IDataResult<AccessToken>> Login(UserForLoginDto userForLoginDto);
+        Task<IDataResult<AccessToken>> Login(UserLoginDto userForLoginDto);
 
     }
 }

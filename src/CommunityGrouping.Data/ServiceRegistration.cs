@@ -10,6 +10,8 @@ namespace CommunityGrouping.Data
         public static void AddDataLayerServiceRegistration(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IOccupationRepository, OccupationRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         }

@@ -5,25 +5,23 @@ using CommunityGrouping.Core;
 using CommunityGrouping.Core.BaseModel;
 using CommunityGrouping.Data.Repositories.Abstract;
 using CommunityGrouping.Data.Repositories.UnitOfWork;
+using Microsoft.AspNetCore.Http;
 
 namespace CommunityGrouping.Business.Services.Concrete
 {
     public abstract class BaseService<TDto, TEntity> : IBaseService<TDto, TEntity> where TEntity : BaseEntity
     {
-
         private readonly IGenericRepository<TEntity> baseRepository;
         protected readonly IMapper Mapper;
         protected readonly IUnitOfWork UnitOfWork;
-
-
-        protected BaseService(IGenericRepository<TEntity> baseRepository, IMapper mapper, IUnitOfWork unitOfWork) : base()
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        protected BaseService(IGenericRepository<TEntity> baseRepository, IMapper mapper, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor) : base()
         {
             this.baseRepository = baseRepository;
             this.Mapper = mapper;
             this.UnitOfWork = unitOfWork;
+            _httpContextAccessor = httpContextAccessor;
         }
-
-
         public virtual async Task<IDataResult<IEnumerable<TDto>>> GetAllAsync()
         {
             // Get list record from DB
@@ -31,18 +29,25 @@ namespace CommunityGrouping.Business.Services.Concrete
             // Mapping Entity to Resource
             var result = Mapper.Map<IEnumerable<TEntity>, IEnumerable<TDto>>(tempEntity);
 
-            return new SuccessDataResult<IEnumerable<TDto>>(result);
+            return new SuccessDataResult<IEnumerable<TDto>>(result, Messages.RECORD_LISTED);
         }
-
         public virtual async Task<IDataResult<TDto>> GetByIdAsync(int id)
         {
-            var tempEntity = await baseRepository.GetByIdAsync(id);
-            // Mapping Entity to Resource
-            var result = Mapper.Map<TEntity, TDto>(tempEntity);
+            try
+            {
+                var tempEntity = await baseRepository.GetByIdAsync(id);
 
-            return new SuccessDataResult<TDto>(result);
+                if (tempEntity == null) return new ErrorDataResult<TDto>(Messages.ID_NOT_EXISTENT);
+
+                var result = Mapper.Map<TEntity, TDto>(tempEntity);
+
+                return new SuccessDataResult<TDto>(result,Messages.RECORD_LISTED);
+            }
+            catch (Exception ex)
+            {
+                throw new MessageResultException(Messages.SYSTEM_ERROR, ex);
+            }
         }
-
         public virtual async Task<IDataResult<TDto>> InsertAsync(TDto insertResource)
         {
             try
@@ -53,14 +58,13 @@ namespace CommunityGrouping.Business.Services.Concrete
                 await baseRepository.AddAsync(tempEntity);
                 await UnitOfWork.CompleteAsync();
 
-                return new SuccessDataResult<TDto>(Mapper.Map<TEntity, TDto>(tempEntity));
+                return new SuccessDataResult<TDto>(Mapper.Map<TEntity, TDto>(tempEntity), Messages.RECORD_ADDED);
             }
             catch (Exception ex)
             {
                 throw new MessageResultException(Messages.ADD_ERROR, ex);
             }
         }
-
         public virtual async Task<IDataResult<TDto>> RemoveAsync(int id)
         {
             try
@@ -73,14 +77,13 @@ namespace CommunityGrouping.Business.Services.Concrete
                 baseRepository.Delete(tempEntity);
                 await UnitOfWork.CompleteAsync();
 
-                return new SuccessDataResult<TDto>(Mapper.Map<TEntity, TDto>(tempEntity));
+                return new SuccessDataResult<TDto>(Mapper.Map<TEntity, TDto>(tempEntity), Messages.RECORD_DELETED);
             }
             catch (Exception ex)
             {
                 throw new MessageResultException(Messages.DELETE_ERROR, ex);
             }
         }
-
         public virtual async Task<IDataResult<TDto>> UpdateAsync(int id, TDto updateResource)
         {
             try
@@ -88,19 +91,38 @@ namespace CommunityGrouping.Business.Services.Concrete
                 var tempEntity = await baseRepository.GetByIdAsync(id);
                 if (tempEntity is null)
                     return new ErrorDataResult<TDto>(Messages.ID_NOT_EXISTENT);
-
-                Mapper.Map(updateResource, tempEntity);
-
+                tempEntity = Mapper.Map(updateResource, tempEntity);
+                
                 await UnitOfWork.CompleteAsync();
 
                 var resource = Mapper.Map<TEntity, TDto>(tempEntity);
 
-                return new SuccessDataResult<TDto>(resource);
+                return new SuccessDataResult<TDto>(resource, Messages.RECORD_UPDATED);
             }
             catch (Exception ex)
             {
                 throw new MessageResultException(Messages.UPDATE_ERROR, ex);
             }
+        }
+        public virtual int CurrentUserId
+        {
+            get
+            {
+                if (_httpContextAccessor.HttpContext != null)
+                {
+                    var claimValue = _httpContextAccessor.HttpContext?.User?.FindFirst(t => t.Type == "ApplicationUserId");
+                    if (claimValue != null)
+                    {
+                        return Convert.ToInt32(claimValue.Value);
+                    }
+                    return 0;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            set => throw new NotImplementedException();
         }
     }
 }

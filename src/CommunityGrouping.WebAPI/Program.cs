@@ -1,20 +1,14 @@
-using System.Reflection;
-using System.Text.Json.Serialization;
 using CommunityGrouping.API.Extension.StartupExtension;
 using CommunityGrouping.API.Middleware;
 using CommunityGrouping.Business;
 using CommunityGrouping.Core;
 using CommunityGrouping.Data;
 using CommunityGrouping.WebAPI.Extension.StartupExtension;
-using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
-builder.Services.AddControllers()
-    .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles)
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly())); builder.Services.AddEndpointsApiExplorer();
-
+builder.Services.AddCustomizeController();
+builder.Services.AddPagination();
+builder.Services.AddRedisDependecyInjection(builder.Configuration);
 builder.Host.UseSerilogExtension();
 builder.Services.AddDbContextDependencyInjection(builder);
 builder.Services.AddAutoMapperDependecyInjection(builder);
@@ -23,10 +17,7 @@ builder.Services.AddCustomSwagger();
 builder.Services.AddBusinessLayerServiceRegistration();
 builder.Services.AddDataLayerServiceRegistration();
 builder.Services.AddCoreLayerServiceRegistration();
-builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -36,7 +27,6 @@ if (app.Environment.IsDevelopment())
         opt.DefaultModelsExpandDepth(-1);
     });
 }
-
 app.UseHttpsRedirection();
 app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseMiddleware<HeartbeatMiddleware>();

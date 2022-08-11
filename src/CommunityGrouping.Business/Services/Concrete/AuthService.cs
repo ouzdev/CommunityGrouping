@@ -63,7 +63,7 @@ namespace CommunityGrouping.Business.Services.Concrete
             return new SuccessResult(Messages.USER_NOTFOUND);
         }
 
-        public async Task<IDataResult<AccessToken>> Login(UserForLoginDto userForLoginDto)
+        public async Task<IDataResult<AccessToken>> Login(UserLoginDto userForLoginDto)
         {
             var userToCheck = await _applicationUserService.GetByMail(userForLoginDto.Email);
             if (!userToCheck.Success)

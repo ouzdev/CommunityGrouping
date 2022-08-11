@@ -1,11 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using CommunityGrouping.Core.BaseModel;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
-namespace CommunityGrouping.Core
+namespace CommunityGrouping.Core.Utilities.Security.JWT.Concrete
 {
     public class JwtHelper : ITokenHelper
     {
@@ -49,10 +48,10 @@ namespace CommunityGrouping.Core
         }
        
 
-        private IEnumerable<Claim> SetClaims(User user)
+        private static IEnumerable<Claim> SetClaims(User user)
         {
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            var claims = new List<Claim> { new Claim("ApplicationUserId",user.Id.ToString()) };
             return claims;
         }
     }

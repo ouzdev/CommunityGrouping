@@ -1,8 +1,9 @@
-﻿using CommunityGrouping.Core.BaseModel;
+﻿using AutoFilterer.Types;
+using CommunityGrouping.Core.BaseModel;
 
 namespace CommunityGrouping.Entities.Dto
 {
-    public class PersonDto:IDto
+    public class PersonDto :IDto
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -10,5 +11,6 @@ namespace CommunityGrouping.Entities.Dto
         public string Email { get; set; }
         public DateTime Birthday { get; set; }
         public string PhoneNumber { get; set; }
+        public int OccupationId { get; set; }
     }
 }

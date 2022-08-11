@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoFilterer.Swagger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
 namespace CommunityGrouping.WebAPI.Extension.StartupExtension;
@@ -11,7 +12,7 @@ public static class CustomizeSwaggerExtension
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Community Grouping API", Version = "v1.0" });
-
+            c.UseAutoFiltererParameters();
             var securityScheme = new OpenApiSecurityScheme
             {
                 Name = "Community Grouping API",

@@ -13,17 +13,20 @@ namespace CommunityGrouping.Business
         public static void AddBusinessLayerServiceRegistration(this IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
+
+            
+            services.AddScoped<IPersonService, PersonService>();
+            
+            services.AddScoped<IOccupationService, OccupationService>();
+
+
             services.AddScoped<IAuthService, AuthService>();
 
             
-            services.AddSingleton<IValidator<UserForRegisterDto>, UserForRegisterDtoValidator>();
+            services.AddSingleton<IValidator<UserForRegisterDto>, UserRegisterDtoValidator>();
+            services.AddSingleton<IValidator<UserLoginDto>, UserLoginDtoValidator>();
+            services.AddSingleton<IValidator<PersonDto>, PersonDtoValidator>();
 
-            //services.AddSingleton<IValidator<UserForLoginDto>, UserForLoginDtoValidator>();
-            //services.AddSingleton<IValidator<UserForRegisterDto>, UserForRegisterDtoValidator>();
-            //services.AddSingleton<IValidator<UserForChangePasswordDto>, UserForChangePasswordDtoValidator>();
-            //services.AddSingleton<IValidator<UserForEditDto>, UserForEditDtoValidator>();
-
-            //services.AddSingleton<IValidator<EmployeeAddDto>, EmployeeAddDtoValidator>();
         }
     }
 }

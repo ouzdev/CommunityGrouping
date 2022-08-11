@@ -10,6 +10,11 @@ namespace CommunityGrouping.Business.Mapper
         {
             CreateMap<UserForRegisterDto, ApplicationUser>().ReverseMap();
             CreateMap<ApplicationUserDto, ApplicationUser>().ReverseMap();
+            
+            CreateMap<PersonDto, Person>().ReverseMap();
+            CreateMap<OccupationDto, Occupation>().ReverseMap();
+            CreateMap<CommunityGroupDto, CommunityGroup>().ReverseMap();
+
         }
     }
 }

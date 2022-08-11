@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CommunityGrouping.Core.Utilities.Security.JWT.Concrete;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CommunityGrouping.Core
 {

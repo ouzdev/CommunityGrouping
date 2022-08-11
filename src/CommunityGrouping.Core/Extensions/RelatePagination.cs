@@ -17,7 +17,7 @@ namespace CommunityGrouping.Core.Extensions
         ? relatePaginationUri.GetPageUri(new PaginationFilter(response.PageNumber + 1, response.PageSize), route)
         : null; ;
             // Assign Previous-Page
-            response.PreviousPage = response.PageNumber - 1 >= 1 && response.PageNumber < roundedTotalPages
+            response.PreviousPage = response.PageNumber - 1 >= 1 && response.PageNumber <= roundedTotalPages
         ? relatePaginationUri.GetPageUri(new PaginationFilter(response.PageNumber - 1, response.PageSize), route)
         : null; ;
             response.FirstPage = relatePaginationUri.GetPageUri(new PaginationFilter(1, response.PageSize), route);
