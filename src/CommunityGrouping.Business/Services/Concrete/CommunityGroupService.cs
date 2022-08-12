@@ -18,10 +18,31 @@ namespace CommunityGrouping.Business.Services.Concrete
     public class CommunityGroupService : BaseService<CommunityGroupDto, CommunityGroup>, ICommunityGroupService
     {
         private readonly ICommunityGroupRepository _communityGroupRepository;
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
         public CommunityGroupService(ICommunityGroupRepository communityGroupRepository, IMapper mapper, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor) : base(communityGroupRepository, mapper, unitOfWork, httpContextAccessor)
         {
             _communityGroupRepository = communityGroupRepository;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+        }
+
+        public async override Task<IDataResult<CommunityGroupDto>> InsertAsync(CommunityGroupDto insertResource)
+        {
+            try
+            {
+                var communityGroup = _mapper.Map<CommunityGroup>(insertResource);
+                communityGroup.ApplicationUserId = base.CurrentUserId;
+                await _communityGroupRepository.AddAsync(communityGroup);
+                await _unitOfWork.CompleteAsync();
+
+                return new SuccessDataResult<CommunityGroupDto>(_mapper.Map<CommunityGroupDto>(communityGroup), Messages.PERSON_ADDED);
+            }
+            catch (Exception ex)
+            {
+                throw new MessageResultException(Messages.ADD_ERROR, ex);
+            }
         }
 
         public override async Task<IDataResult<CommunityGroupDto>> UpdateAsync(int id, CommunityGroupDto updateResource)
@@ -34,9 +55,9 @@ namespace CommunityGrouping.Business.Services.Concrete
                 tempEntity.Name = updateResource.Name;
                 tempEntity.Description = updateResource.Description;
                 _communityGroupRepository.Update(tempEntity);
-                await UnitOfWork.CompleteAsync();
+                await _unitOfWork.CompleteAsync();
 
-                var resource = Mapper.Map<CommunityGroup, CommunityGroupDto>(tempEntity);
+                var resource = _mapper.Map<CommunityGroup, CommunityGroupDto>(tempEntity);
 
                 return new SuccessDataResult<CommunityGroupDto>(resource, Messages.RECORD_UPDATED);
             }

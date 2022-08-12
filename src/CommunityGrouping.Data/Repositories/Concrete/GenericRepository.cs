@@ -20,7 +20,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
     public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>>? filter = null)
     {
         if (filter != null)
-            return await _entities.SingleOrDefaultAsync(filter);
+            return await _entities.Where(x => !x.IsDeleted).SingleOrDefaultAsync(filter);
 
         return await _entities.SingleOrDefaultAsync();
     }
@@ -31,7 +31,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
     }
     public async Task<TEntity?> GetByIdAsync(int entityId)
     {
-        return await _entities.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entityId);
+        return await _entities.AsNoTracking().Where(x=>!x.IsDeleted).FirstOrDefaultAsync(x => x.Id == entityId);
     }
 
     public async Task AddAsync(TEntity entity)
@@ -47,7 +47,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
 
     public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null)
     {
-        return await (filter == null ? _entities.AsNoTracking().ToListAsync() : _entities.AsNoTracking().Where(filter).ToListAsync());
+        return await (filter == null ? _entities.AsNoTracking().Where(x => !x.IsDeleted).ToListAsync() : _entities.AsNoTracking().Where(filter).ToListAsync());
     }
 
     public void Update(TEntity entity)

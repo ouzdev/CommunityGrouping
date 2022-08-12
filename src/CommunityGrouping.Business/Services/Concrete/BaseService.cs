@@ -11,23 +11,23 @@ namespace CommunityGrouping.Business.Services.Concrete
 {
     public abstract class BaseService<TDto, TEntity> : IBaseService<TDto, TEntity> where TEntity : BaseEntity
     {
-        private readonly IGenericRepository<TEntity> baseRepository;
-        protected readonly IMapper Mapper;
-        protected readonly IUnitOfWork UnitOfWork;
+        private readonly IGenericRepository<TEntity> _baseRepository;
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _httpContextAccessor;
         protected BaseService(IGenericRepository<TEntity> baseRepository, IMapper mapper, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor) : base()
         {
-            this.baseRepository = baseRepository;
-            this.Mapper = mapper;
-            this.UnitOfWork = unitOfWork;
+            _baseRepository = baseRepository;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
         }
         public virtual async Task<IDataResult<IEnumerable<TDto>>> GetAllAsync()
         {
             // Get list record from DB
-            var tempEntity = await baseRepository.GetAllAsync();
+            var tempEntity = await _baseRepository.GetAllAsync();
             // Mapping Entity to Resource
-            var result = Mapper.Map<IEnumerable<TEntity>, IEnumerable<TDto>>(tempEntity);
+            var result = _mapper.Map<IEnumerable<TEntity>, IEnumerable<TDto>>(tempEntity);
 
             return new SuccessDataResult<IEnumerable<TDto>>(result, Messages.RECORD_LISTED);
         }
@@ -35,11 +35,11 @@ namespace CommunityGrouping.Business.Services.Concrete
         {
             try
             {
-                var tempEntity = await baseRepository.GetByIdAsync(id);
+                var tempEntity = await _baseRepository.GetByIdAsync(id);
 
                 if (tempEntity == null) return new ErrorDataResult<TDto>(Messages.ID_NOT_EXISTENT);
 
-                var result = Mapper.Map<TEntity, TDto>(tempEntity);
+                var result = _mapper.Map<TEntity, TDto>(tempEntity);
 
                 return new SuccessDataResult<TDto>(result,Messages.RECORD_LISTED);
             }
@@ -53,12 +53,12 @@ namespace CommunityGrouping.Business.Services.Concrete
             try
             {
                 // Mapping Resource to Entity
-                var tempEntity = Mapper.Map<TDto, TEntity>(insertResource);
+                var tempEntity = _mapper.Map<TDto, TEntity>(insertResource);
 
-                await baseRepository.AddAsync(tempEntity);
-                await UnitOfWork.CompleteAsync();
+                await _baseRepository.AddAsync(tempEntity);
+                await _unitOfWork.CompleteAsync();
 
-                return new SuccessDataResult<TDto>(Mapper.Map<TEntity, TDto>(tempEntity), Messages.RECORD_ADDED);
+                return new SuccessDataResult<TDto>(_mapper.Map<TEntity, TDto>(tempEntity), Messages.RECORD_ADDED);
             }
             catch (Exception ex)
             {
@@ -70,14 +70,14 @@ namespace CommunityGrouping.Business.Services.Concrete
             try
             {
                 // Validate Id is existent
-                var tempEntity = await baseRepository.GetByIdAsync(id);
+                var tempEntity = await _baseRepository.GetByIdAsync(id);
                 if (tempEntity is null)
                     return new ErrorDataResult<TDto>(Messages.ID_NOT_EXISTENT);
 
-                baseRepository.Delete(tempEntity);
-                await UnitOfWork.CompleteAsync();
+                _baseRepository.Delete(tempEntity);
+                await _unitOfWork.CompleteAsync();
 
-                return new SuccessDataResult<TDto>(Mapper.Map<TEntity, TDto>(tempEntity), Messages.RECORD_DELETED);
+                return new SuccessDataResult<TDto>(_mapper.Map<TEntity, TDto>(tempEntity), Messages.RECORD_DELETED);
             }
             catch (Exception ex)
             {
@@ -88,14 +88,14 @@ namespace CommunityGrouping.Business.Services.Concrete
         {
             try
             {
-                var tempEntity = await baseRepository.GetByIdAsync(id);
+                var tempEntity = await _baseRepository.GetByIdAsync(id);
                 if (tempEntity is null)
                     return new ErrorDataResult<TDto>(Messages.ID_NOT_EXISTENT);
-                tempEntity = Mapper.Map(updateResource, tempEntity);
-                    
-                await UnitOfWork.CompleteAsync();
+                tempEntity = _mapper.Map(updateResource, tempEntity);
+                _baseRepository.Update(tempEntity);
+                await _unitOfWork.CompleteAsync();
 
-                var resource = Mapper.Map<TEntity, TDto>(tempEntity);
+                var resource = _mapper.Map<TEntity, TDto>(tempEntity);
 
                 return new SuccessDataResult<TDto>(resource, Messages.RECORD_UPDATED);
             }

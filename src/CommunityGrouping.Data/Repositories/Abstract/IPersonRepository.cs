@@ -12,7 +12,8 @@ namespace CommunityGrouping.Data.Repositories.Abstract
 {
     public interface IPersonRepository:IGenericRepository<Person>
     {
-        Task<(IEnumerable<Person> records, int total)> GetPaginationAsync(PaginationFilter paginationFilter, PersonDto filterResource);
+        Task<(IEnumerable<Person> records, int total)> GetPaginationAsync(PersonFilter? filterResource);
+        
         Task InsertBulk(IList<Person> persons);
 
         Task<int> TotalRecordAsync();

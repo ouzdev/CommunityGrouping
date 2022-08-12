@@ -2,9 +2,13 @@
 {
     public class PaginationFilter
     {
-        public int PageNumber { get; }
-        public int PageSize { get; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
 
+        public PaginationFilter()
+        {
+            
+        }
         public PaginationFilter(int page, int pageSize)
         {
             PageNumber = page;
@@ -16,5 +20,6 @@
             if (PageSize <= 0 || PageSize > 20)
                 PageSize = 10;
         }
+        
     }
 }

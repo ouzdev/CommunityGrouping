@@ -16,6 +16,10 @@ public class UnitOfWork : IUnitOfWork
     {
         await _dbContext.SaveChangesAsync();
     }
+    public void Complete()
+    {
+         _dbContext.SaveChanges();
+    }
 
     public async Task BulkCompleteAsync()
     {

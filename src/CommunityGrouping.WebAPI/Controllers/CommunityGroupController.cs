@@ -1,11 +1,13 @@
 ﻿using CommunityGrouping.Business.Services.Abstract;
 using CommunityGrouping.Entities.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CommunityGrouping.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CommunityGroupController : ControllerBase
@@ -45,14 +47,14 @@ namespace CommunityGrouping.API.Controllers
         [HttpPost("AddPersonCommunityGroup")]
         public async Task<IActionResult> AddPersonCommunityGroup([FromBody] PersonCommunityGroupDto personCommunityGroupDto)
         {
-            var result = await _communityGroupService.AddPersonCommunityGroupAsync(personCommunityGroupDto);
-            if (result.Success)
-            {
-                return Ok(result);
+            //var result = await _communityGroupService.AddPersonCommunityGroupAsync(personCommunityGroupDto);
+            //if (result.Success)
+            //{
+            //    return Ok(result);
 
-            }
+            //}
 
-            return NotFound(result);
+            return NotFound();
         }
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CommunityGroupDto communityGroupDto)

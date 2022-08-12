@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityGrouping.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PersonController : ControllerBase
@@ -20,12 +21,11 @@ namespace CommunityGrouping.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPaginationAsync([FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] PersonFilter filter)
+        public async Task<IActionResult> GetPaginationAsync([FromQuery] PersonFilter personFilter)
         {
-
+            PersonFilter filter = new(personFilter.PageNumber, personFilter.PageSize,personFilter.SortOrder,personFilter.FirstName,personFilter.LastName);
             var route = Request.Path.Value;
-            PaginationFilter pagintation = new PaginationFilter(pageNumber, pageSize);
-            var result = await _personService.GetPaginationAsync(pagintation, new (), route);
+            var result = await _personService.GetPaginationAsync(filter, route);
 
             if (result.Success)
             {
@@ -47,7 +47,7 @@ namespace CommunityGrouping.API.Controllers
 
         }
 
-        [Authorize]
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PersonDto personDto)
         {
@@ -58,7 +58,7 @@ namespace CommunityGrouping.API.Controllers
             }
             return BadRequest(result);
         }
-        [Authorize]
+
         [HttpPost("insertBulkOperation")]
         public async Task<IActionResult> InsertBulkPerson([FromForm] IFormFile file)
         {
@@ -69,7 +69,6 @@ namespace CommunityGrouping.API.Controllers
             }
             return BadRequest();
         }
-        [Authorize]
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] PersonDto personDto)
@@ -81,7 +80,6 @@ namespace CommunityGrouping.API.Controllers
             }
             return BadRequest(result);
         }
-        [Authorize]
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

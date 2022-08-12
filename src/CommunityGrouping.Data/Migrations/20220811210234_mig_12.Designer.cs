@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommunityGrouping.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220810154335_mig_5")]
-    partial class mig_5
+    [Migration("20220811210234_mig_12")]
+    partial class mig_12
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,11 +33,7 @@ namespace CommunityGrouping.Data.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
@@ -49,13 +45,13 @@ namespace CommunityGrouping.Data.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("LastActivity")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LastName")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<byte[]>("PasswordHash")
                         .HasColumnType("bytea");
@@ -66,8 +62,6 @@ namespace CommunityGrouping.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ApplicationUsers");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
                 });
 
             modelBuilder.Entity("CommunityGrouping.Entities.CommunityGroup", b =>
@@ -78,8 +72,11 @@ namespace CommunityGrouping.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -88,16 +85,21 @@ namespace CommunityGrouping.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.ToTable("CommunityGroups");
                 });
 
-            modelBuilder.Entity("CommunityGrouping.Entities.Occupation", b =>
+            modelBuilder.Entity("CommunityGrouping.Entities.Person", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,52 +107,61 @@ namespace CommunityGrouping.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Description")
+                    b.Property<DateTime?>("Birthday")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("CommunityGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Occupation")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Occupation");
-                });
-
-            modelBuilder.Entity("CommunityGrouping.Entities.Person", b =>
-                {
-                    b.HasBaseType("CommunityGrouping.Entities.ApplicationUser");
-
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("Birthday")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("CommunityGroupId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OccupationId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("CommunityGroupId");
+                    b.HasIndex("Email")
+                        .IsUnique();
 
-                    b.HasIndex("OccupationId");
+                    b.ToTable("People");
+                });
 
-                    b.HasDiscriminator().HasValue("Person");
+            modelBuilder.Entity("CommunityGrouping.Entities.CommunityGroup", b =>
+                {
+                    b.HasOne("CommunityGrouping.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany("CommunityGroups")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("CommunityGrouping.Entities.Person", b =>
@@ -161,29 +172,12 @@ namespace CommunityGrouping.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CommunityGrouping.Entities.CommunityGroup", null)
-                        .WithMany("People")
-                        .HasForeignKey("CommunityGroupId");
-
-                    b.HasOne("CommunityGrouping.Entities.Occupation", "Occupation")
-                        .WithMany("Persons")
-                        .HasForeignKey("OccupationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("Occupation");
                 });
 
-            modelBuilder.Entity("CommunityGrouping.Entities.CommunityGroup", b =>
+            modelBuilder.Entity("CommunityGrouping.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("People");
-                });
-
-            modelBuilder.Entity("CommunityGrouping.Entities.Occupation", b =>
-                {
-                    b.Navigation("Persons");
+                    b.Navigation("CommunityGroups");
                 });
 #pragma warning restore 612, 618
         }

@@ -17,6 +17,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 namespace CommunityGrouping.Business.Services.Concrete
@@ -28,21 +29,18 @@ namespace CommunityGrouping.Business.Services.Concrete
         private readonly IPersonRepository _personRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IOccupationService _occupationService;
         private readonly IDistributedCache _distributedCache;
 
         public PersonService(IPersonRepository personRepository,
                              IMapper mapper,
                              IUnitOfWork unitOfWork,
                              IHttpContextAccessor httpContextAccessor,
-                             IOccupationService occupationService,
                              IDistributedCache distributedCache,
                              IPaginationUriService paginationUriService) : base(personRepository, mapper, unitOfWork, httpContextAccessor)
         {
             _personRepository = personRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _occupationService = occupationService;
             _distributedCache = distributedCache;
             _paginationUriService = paginationUriService;
         }
@@ -51,10 +49,6 @@ namespace CommunityGrouping.Business.Services.Concrete
         {
             try
             {
-                var occupationResult = await _occupationService.GetByIdAsync(insertResource.OccupationId);
-
-                if (!occupationResult.Success) return new ErrorDataResult<PersonDto>(Messages.OCCUPATION_NOT_FOUND);
-
                 var person = _mapper.Map<Person>(insertResource);
                 person.ApplicationUserId = base.CurrentUserId;
                 await _personRepository.AddAsync(person);
@@ -68,14 +62,46 @@ namespace CommunityGrouping.Business.Services.Concrete
             }
         }
 
-        public async Task<IDataResult<IEnumerable<PersonDto>>> GetPaginationAsync(PaginationFilter paginationFilter, PersonDto filterResource, string route)
+        public async Task<IDataResult<IEnumerable<PersonDto>>> GetPaginationAsync( PersonFilter filterResource, string route)
         {
-
-            var paginationPerson = await _personRepository.GetPaginationAsync(paginationFilter, filterResource);
-            var resource = GeneratePagination(paginationFilter, route, paginationPerson);
+            var paginationPerson = await _personRepository.GetPaginationAsync(filterResource);
+            var resource = GeneratePagination(filterResource,route, paginationPerson);
             return resource;
-
         }
+
+        //public async Task<IDataResult<IEnumerable<PersonDto>>> GetPaginationAsync(PersonFilter paginationFilter, string route)
+        //{
+        //    var cacheKey = $"{route}";
+        //    string json;
+        //    var employeesFromCache = await _distributedCache.GetAsync(cacheKey);
+        //    if (employeesFromCache != null)
+        //    {
+        //        json = Encoding.UTF8.GetString(employeesFromCache);
+        //        var employees = JsonConvert.DeserializeObject<PaginationEntityResponse<PersonDto>>(json);
+        //        return new PaginatedResult<IEnumerable<PersonDto>>(employees.Data, employees.PageNumber,
+        //            employees.PageSize)
+        //        {
+        //            PreviousPage = employees.PreviousPage,
+        //            NextPage = employees.NextPage,
+        //            LastPage = employees.LastPage,
+        //            FirstPage = employees.FirstPage,
+        //            TotalPages = employees.TotalPages,
+        //            TotalRecords = employees.TotalRecords
+        //        };
+        //    }
+        //    else
+        //    {
+        //        var paginationPerson = await _personRepository.GetPaginationAsync(paginationFilter);
+        //        var resource = GeneratePagination(paginationFilter, route, paginationPerson);
+        //        json = JsonConvert.SerializeObject(resource);
+        //        employeesFromCache = Encoding.UTF8.GetBytes(json);
+        //        var options = new DistributedCacheEntryOptions()
+        //            .SetSlidingExpiration(TimeSpan.FromDays(1))
+        //            .SetAbsoluteExpiration(DateTime.Now.AddMonths(1));
+        //        await _distributedCache.SetAsync(cacheKey, employeesFromCache, options);
+        //        return resource;
+        //    }
+        //}
 
         public async Task<IResult> InsertBulkPerson(IFormFile formFile)
         {
@@ -101,7 +127,7 @@ namespace CommunityGrouping.Business.Services.Concrete
 
         private PaginatedResult<IEnumerable<PersonDto>> GeneratePagination(PaginationFilter paginationFilter, string route, (IEnumerable<Person> records, int total) paginationPerson)
         {
-            var tempResource = Mapper.Map<IEnumerable<Person>, IEnumerable<PersonDto>>(paginationPerson.records);
+            var tempResource = _mapper.Map<IEnumerable<Person>, IEnumerable<PersonDto>>(paginationPerson.records);
             var resource = new PaginatedResult<IEnumerable<PersonDto>>(tempResource);
             resource.CreatePaginationResponse(paginationFilter, paginationPerson.total, _paginationUriService, route);
             return resource;

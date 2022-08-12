@@ -10,7 +10,8 @@ namespace CommunityGrouping.Business.Services.Abstract
 {
     public interface IPersonService:IBaseService<PersonDto,Person>
     {
-        Task<IDataResult<IEnumerable<PersonDto>>> GetPaginationAsync(PaginationFilter paginationFilter, PersonDto filterResource, string route);
+        Task<IDataResult<IEnumerable<PersonDto>>> GetPaginationAsync(PersonFilter paginationFilter, string route);
+
         Task<IResult> InsertBulkPerson(IFormFile file);
     }
 }

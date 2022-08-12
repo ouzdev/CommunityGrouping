@@ -6,6 +6,8 @@ namespace CommunityGrouping.Core.Extensions
     {
         public static void CreatePaginationResponse<Response, Pagination>(this PaginatedResult<Response> response, Pagination pagination, int totalRecords, IPaginationUriService relatePaginationUri, string route) where Pagination : PaginationFilter
         {
+            var sss = typeof(Pagination);
+
             // Assign Query-Resource
             response.PageNumber = pagination.PageNumber;
             response.PageSize = pagination.PageSize;

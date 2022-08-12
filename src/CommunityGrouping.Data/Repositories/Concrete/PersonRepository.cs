@@ -1,4 +1,5 @@
-﻿using CommunityGrouping.Core.BaseModel;
+﻿using CommunityGrouping.Business.Filters;
+using CommunityGrouping.Core.BaseModel;
 using CommunityGrouping.Core.Extensions;
 using CommunityGrouping.Data.Context.EntityFramework;
 using CommunityGrouping.Data.Repositories.Abstract;
@@ -17,28 +18,31 @@ namespace CommunityGrouping.Data.Repositories.Concrete
             _dbContext = context;
         }
 
-        public async Task<(IEnumerable<Person> records, int total)> GetPaginationAsync(PaginationFilter paginationFilter, PersonDto filterResource)
+        public async Task<(IEnumerable<Person> records, int total)> GetPaginationAsync(PersonFilter filterResource)
         {
             var queryable = ConditionFilter(filterResource);
 
             var total = await queryable.CountAsync();
 
-            var records = await queryable.AsNoTracking()
-                .AsSplitQuery()
-                .OrderBy(x => x.Id)
-                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                .Take(paginationFilter.PageSize)
-                .ToListAsync();
+            queryable.AsNoTracking().AsSplitQuery();
 
-            return (records, total);
+          var res =  filterResource.SortOrder == SortOrder.Descending ? await queryable.OrderByDescending(x => x.Id)
+                .Skip((filterResource.PageNumber - 1) * filterResource.PageSize)
+                .Take(filterResource.PageSize).ToListAsync() : 
+                await queryable
+                    .OrderBy(x => x.Id)
+                    .Skip((filterResource.PageNumber - 1) * filterResource.PageSize)
+                    .Take(filterResource.PageSize).ToListAsync();
+            
+            return (res, total);
         }
 
         public async Task InsertBulk(IList<Person> persons)
         {
-             await _dbContext.BulkInsertAsync<Person>(persons);
+            await _dbContext.BulkInsertAsync<Person>(persons);
         }
 
-        private IQueryable<Person> ConditionFilter(PersonDto filterResource)
+        private IQueryable<Person> ConditionFilter(PersonFilter filterResource)
         {
             var queryable = _dbContext.People.AsQueryable();
 
