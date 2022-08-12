@@ -1,4 +1,4 @@
-# CommunityGrouping
+# Community Grouping API
 
 # **Technologies &  Framework**
 
