@@ -1,4 +1,6 @@
-﻿namespace CommunityGrouping.Business.Constant
+﻿using CommunityGrouping.Entities.Dto;
+
+namespace CommunityGrouping.Business.Constant
 {
     public static class Messages
     {
@@ -28,5 +30,6 @@
         public static string RECORD_ADDED = "Kayıt Eklendi";
         public static string RECORD_DELETED = "Kayıt Silindi";
         public static string RECORD_UPDATED = "Kayıt Güncellendi";
+        public static string ID_EXISTENT = "Bu Kayıt Zaten Mevcut Veya Kayıtlı";
     }
 }

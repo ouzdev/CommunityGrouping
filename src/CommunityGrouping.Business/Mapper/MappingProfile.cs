@@ -14,9 +14,10 @@ namespace CommunityGrouping.Business.Mapper
             
             CreateMap<PersonDto, Person>().ReverseMap();
             CreateMap<CommunityGroupDto, CommunityGroup>().ReverseMap();
+            CreateMap<PersonCommunityGroupDto, Person>().ReverseMap();
 
             CreateMap<CommunityGroupPeopleDto, CommunityGroup>().ReverseMap();
-                
+            
 
             CreateMap<PersonMap, Person>().ReverseMap();
 

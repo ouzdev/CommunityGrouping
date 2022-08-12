@@ -13,6 +13,7 @@ using CommunityGrouping.Data.Repositories.Abstract;
 using CommunityGrouping.Data.Repositories.UnitOfWork;
 using CommunityGrouping.Entities;
 using CommunityGrouping.Entities.Dto;
+using CommunityGrouping.Entities.QueryModel;
 using CsvHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
@@ -63,7 +64,7 @@ namespace CommunityGrouping.Business.Services.Concrete
         {
             if (filterResource.SortOrder != null || filterResource.LastName != null || filterResource.FirstName != null)
                 return GeneratePagination(filterResource, route, await _personRepository.GetPaginationAsync(filterResource));
-            
+
             var cacheKey = $"{route}/pageNumber={filterResource.PageNumber}/pageSize={filterResource.PageSize}";
             string json;
             var employeesFromCache = await _distributedCache.GetAsync(cacheKey);
@@ -96,12 +97,51 @@ namespace CommunityGrouping.Business.Services.Concrete
             }
         }
 
+        public async Task<IDataResult<PersonDto>> AddPersonToCommunityGroup(AddPersonToGroupQuery groupQuery)
+        {
+            try
+            {
+                var tempEntity = await _personRepository.GetByIdAsync(groupQuery.PersonId);
+
+                if (tempEntity == null) return new ErrorDataResult<PersonDto>(Messages.ID_NOT_EXISTENT);
+                if (tempEntity.CommunityGroupId! > 0) return new ErrorDataResult<PersonDto>(Messages.ID_EXISTENT);
+
+                tempEntity.CommunityGroupId = groupQuery.GroupId; _personRepository.Update(tempEntity);
+                await _unitOfWork.CompleteAsync(); var result = _mapper.Map<Person, PersonDto>(tempEntity);
+
+                return new SuccessDataResult<PersonDto>(result, Messages.RECORD_ADDED);
+            }
+            catch (Exception ex)
+            {
+                throw new MessageResultException(Messages.ADD_ERROR, ex);
+            }
+        }
+
+        public async Task<IDataResult<PersonDto>> DeletePersonToCommunityGroup(int id)
+        {
+            try
+            {
+                var tempEntity = await _personRepository.GetByIdAsync(id);
+                if (tempEntity.CommunityGroupId == 0) return new ErrorDataResult<PersonDto>(Messages.ID_NOT_EXISTENT);
+
+                tempEntity.CommunityGroupId = 0;
+                _personRepository.Update(tempEntity);
+                await _unitOfWork.CompleteAsync();
+                return new SuccessDataResult<PersonDto>(_mapper.Map<Person, PersonDto>(tempEntity), Messages.RECORD_DELETED);
+
+            }
+            catch (Exception ex)
+            {
+                throw new MessageResultException(Messages.DELETE_ERROR, ex);
+            }
+        }
+
 
         public async Task<IResult> InsertBulkPerson(IFormFile formFile)
         {
             try
             {
-              
+
                 using var reader = new StreamReader(formFile.OpenReadStream());
                 var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
                 var records = csvReader.GetRecords<PersonMap>();

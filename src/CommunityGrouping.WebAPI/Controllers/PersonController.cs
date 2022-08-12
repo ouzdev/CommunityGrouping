@@ -2,6 +2,7 @@
 using CommunityGrouping.Business.Services.Abstract;
 using CommunityGrouping.Core.BaseModel;
 using CommunityGrouping.Entities.Dto;
+using CommunityGrouping.Entities.QueryModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,9 +24,9 @@ namespace CommunityGrouping.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPaginationAsync([FromQuery] PersonFilter personFilter)
         {
-      
+
             var route = Request.Path.Value;
-            
+
             PersonFilter filter = new(personFilter.PageNumber, personFilter.PageSize, personFilter.SortOrder, personFilter.FirstName, personFilter.LastName);
 
             var result = await _personService.GetPaginationAsync(filter, route);
@@ -49,8 +50,6 @@ namespace CommunityGrouping.API.Controllers
             return NotFound(result);
 
         }
-
-
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PersonDto personDto)
         {
@@ -71,6 +70,26 @@ namespace CommunityGrouping.API.Controllers
                 return Ok(result);
             }
             return BadRequest();
+        }
+        [HttpPost("AddPersonToGroup")]
+        public async Task<IActionResult> AddPersonToCommunityGroup([FromQuery] AddPersonToGroupQuery addPersonToGroupDto)
+        {
+            var result = await _personService.AddPersonToCommunityGroup(addPersonToGroupDto);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost("DeletePersonToGroup")]
+        public async Task<IActionResult> DeletePersonToCommunityGroup([FromQuery] int id)
+        {
+            var result = await _personService.DeletePersonToCommunityGroup(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
         [HttpPut("{id}")]
@@ -95,4 +114,6 @@ namespace CommunityGrouping.API.Controllers
             return BadRequest(result);
         }
     }
+
+
 }
