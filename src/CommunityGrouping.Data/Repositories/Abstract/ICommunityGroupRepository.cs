@@ -9,5 +9,7 @@ namespace CommunityGrouping.Data.Repositories.Abstract
 {
     public interface ICommunityGroupRepository:IGenericRepository<CommunityGroup>
     {
+        Task<CommunityGroup> GetGroupWithPeople(int communityId);
+
     }
 }

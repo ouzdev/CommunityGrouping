@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using CommunityGrouping.Business.Services.Concrete;
 using CommunityGrouping.Entities;
 using CommunityGrouping.Entities.Dto;
+
 
 namespace CommunityGrouping.Business.Mapper
 {
@@ -14,8 +14,16 @@ namespace CommunityGrouping.Business.Mapper
             
             CreateMap<PersonDto, Person>().ReverseMap();
             CreateMap<CommunityGroupDto, CommunityGroup>().ReverseMap();
+
+            CreateMap<CommunityGroupPeopleDto, CommunityGroup>().ReverseMap();
+                
+
             CreateMap<PersonMap, Person>().ReverseMap();
 
         }
+
+       
     }
+
+  
 }

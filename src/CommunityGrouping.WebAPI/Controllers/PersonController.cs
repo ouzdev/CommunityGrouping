@@ -62,7 +62,7 @@ namespace CommunityGrouping.API.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("insertBulkOperation")]
+        [HttpPost("BulkInsert")]
         public async Task<IActionResult> InsertBulkPerson([FromForm] IFormFile file)
         {
             var result = await _personService.InsertBulkPerson(file);

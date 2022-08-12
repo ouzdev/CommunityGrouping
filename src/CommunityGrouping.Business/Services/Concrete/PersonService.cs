@@ -101,6 +101,7 @@ namespace CommunityGrouping.Business.Services.Concrete
         {
             try
             {
+              
                 using var reader = new StreamReader(formFile.OpenReadStream());
                 var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
                 var records = csvReader.GetRecords<PersonMap>();

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using AutoMapper;
 using CommunityGrouping.Business.Constant;
 using CommunityGrouping.Business.Services.Abstract;
@@ -64,6 +60,38 @@ namespace CommunityGrouping.Business.Services.Concrete
             catch (Exception ex)
             {
                 throw new MessageResultException(Messages.UPDATE_ERROR, ex);
+            }
+        }
+
+        public async Task<IDataResult<CommunityGroupPeopleDto>> GetCommunityGroupPeopleAsync(int communityGroupId)
+        {
+            try
+            {
+                var tempEntity = await _communityGroupRepository.GetGroupWithPeople(communityGroupId);
+                
+                if (tempEntity == null) return new ErrorDataResult<CommunityGroupPeopleDto>(Messages.ID_NOT_EXISTENT);
+
+                var resource = _mapper.Map<CommunityGroupPeopleDto>(tempEntity);
+                return new SuccessDataResult<CommunityGroupPeopleDto>(resource, Messages.RECORD_LISTED);
+            }
+            catch (Exception ex)
+            {
+                throw new MessageResultException(Messages.SYSTEM_ERROR, ex);
+            }
+        }
+
+        public void MapCollectionsInPlace<TSource, TDestination>(IEnumerable<TSource> source_collection,
+            IEnumerable<TDestination> destination_collection)
+        {
+            var source_enumerator = source_collection.GetEnumerator();
+            var destination_enumerator = destination_collection.GetEnumerator();
+
+            while (source_enumerator.MoveNext())
+            {
+                if (!destination_enumerator.MoveNext())
+                    throw new Exception("Source collection has more items than destination collection");
+
+                _mapper.Map(source_enumerator.Current, destination_enumerator.Current);
             }
         }
     }
