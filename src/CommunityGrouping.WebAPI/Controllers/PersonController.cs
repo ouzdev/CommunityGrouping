@@ -23,8 +23,11 @@ namespace CommunityGrouping.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPaginationAsync([FromQuery] PersonFilter personFilter)
         {
-            PersonFilter filter = new(personFilter.PageNumber, personFilter.PageSize,personFilter.SortOrder,personFilter.FirstName,personFilter.LastName);
+      
             var route = Request.Path.Value;
+            
+            PersonFilter filter = new(personFilter.PageNumber, personFilter.PageSize, personFilter.SortOrder, personFilter.FirstName, personFilter.LastName);
+
             var result = await _personService.GetPaginationAsync(filter, route);
 
             if (result.Success)

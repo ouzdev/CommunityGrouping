@@ -14,10 +14,8 @@ using CommunityGrouping.Data.Repositories.UnitOfWork;
 using CommunityGrouping.Entities;
 using CommunityGrouping.Entities.Dto;
 using CsvHelper;
-using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 namespace CommunityGrouping.Business.Services.Concrete
@@ -30,7 +28,6 @@ namespace CommunityGrouping.Business.Services.Concrete
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDistributedCache _distributedCache;
-
         public PersonService(IPersonRepository personRepository,
                              IMapper mapper,
                              IUnitOfWork unitOfWork,
@@ -62,46 +59,43 @@ namespace CommunityGrouping.Business.Services.Concrete
             }
         }
 
-        public async Task<IDataResult<IEnumerable<PersonDto>>> GetPaginationAsync( PersonFilter filterResource, string route)
+        public async Task<IDataResult<IEnumerable<PersonDto>>> GetPaginationAsync(PersonFilter filterResource, string route)
         {
-            var paginationPerson = await _personRepository.GetPaginationAsync(filterResource);
-            var resource = GeneratePagination(filterResource,route, paginationPerson);
-            return resource;
+            if (filterResource.SortOrder != null || filterResource.LastName != null || filterResource.FirstName != null)
+                return GeneratePagination(filterResource, route, await _personRepository.GetPaginationAsync(filterResource));
+            
+            var cacheKey = $"{route}/pageNumber={filterResource.PageNumber}/pageSize={filterResource.PageSize}";
+            string json;
+            var employeesFromCache = await _distributedCache.GetAsync(cacheKey);
+            if (employeesFromCache != null)
+            {
+                json = Encoding.UTF8.GetString(employeesFromCache);
+                var employees = JsonConvert.DeserializeObject<PaginationEntityResponse<PersonDto>>(json);
+                return new PaginatedResult<IEnumerable<PersonDto>>(employees.Data, employees.PageNumber,
+                    employees.PageSize)
+                {
+                    PreviousPage = employees.PreviousPage,
+                    NextPage = employees.NextPage,
+                    LastPage = employees.LastPage,
+                    FirstPage = employees.FirstPage,
+                    TotalPages = employees.TotalPages,
+                    TotalRecords = employees.TotalRecords
+                };
+            }
+            else
+            {
+                var paginationPerson = await _personRepository.GetPaginationAsync(filterResource);
+                var resource = GeneratePagination(filterResource, route, paginationPerson);
+                json = JsonConvert.SerializeObject(GeneratePagination(filterResource, route, await _personRepository.GetPaginationAsync(filterResource)));
+                employeesFromCache = Encoding.UTF8.GetBytes(json);
+                var options = new DistributedCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromDays(1))
+                    .SetAbsoluteExpiration(DateTime.Now.AddMonths(1));
+                await _distributedCache.SetAsync(cacheKey, employeesFromCache, options);
+                return resource;
+            }
         }
 
-        //public async Task<IDataResult<IEnumerable<PersonDto>>> GetPaginationAsync(PersonFilter paginationFilter, string route)
-        //{
-        //    var cacheKey = $"{route}";
-        //    string json;
-        //    var employeesFromCache = await _distributedCache.GetAsync(cacheKey);
-        //    if (employeesFromCache != null)
-        //    {
-        //        json = Encoding.UTF8.GetString(employeesFromCache);
-        //        var employees = JsonConvert.DeserializeObject<PaginationEntityResponse<PersonDto>>(json);
-        //        return new PaginatedResult<IEnumerable<PersonDto>>(employees.Data, employees.PageNumber,
-        //            employees.PageSize)
-        //        {
-        //            PreviousPage = employees.PreviousPage,
-        //            NextPage = employees.NextPage,
-        //            LastPage = employees.LastPage,
-        //            FirstPage = employees.FirstPage,
-        //            TotalPages = employees.TotalPages,
-        //            TotalRecords = employees.TotalRecords
-        //        };
-        //    }
-        //    else
-        //    {
-        //        var paginationPerson = await _personRepository.GetPaginationAsync(paginationFilter);
-        //        var resource = GeneratePagination(paginationFilter, route, paginationPerson);
-        //        json = JsonConvert.SerializeObject(resource);
-        //        employeesFromCache = Encoding.UTF8.GetBytes(json);
-        //        var options = new DistributedCacheEntryOptions()
-        //            .SetSlidingExpiration(TimeSpan.FromDays(1))
-        //            .SetAbsoluteExpiration(DateTime.Now.AddMonths(1));
-        //        await _distributedCache.SetAsync(cacheKey, employeesFromCache, options);
-        //        return resource;
-        //    }
-        //}
 
         public async Task<IResult> InsertBulkPerson(IFormFile formFile)
         {
