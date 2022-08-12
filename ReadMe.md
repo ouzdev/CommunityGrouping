@@ -5,8 +5,9 @@
 - .Net 6.0  WebAPI
 - Entity Framework Core 6.0
 - PostgreSQL
-- Redis
-- Serilog
+- Redis Cache
+- Serilog File Logger
+- Json Web Token (JWT)
 - Swagger
 - Fluent Validation
 - Fluent Assertions
@@ -88,6 +89,8 @@ Person pagination uses Redis cache. Edit Redis configuration **CommunityGrouping
 
 # **Swagger Screenshots**
 
+# **AUTH ENDPOINTS**
+
 ## Login Endpoint
 
 ### Request
@@ -111,6 +114,8 @@ Person pagination uses Redis cache. Edit Redis configuration **CommunityGrouping
 ![Untitled](images/Untitled%204.png)
 
 ---
+
+# **PERSON ENDPOINTS**
 
 ## Person Pagination Endpoint
 
@@ -195,3 +200,85 @@ Person pagination uses Redis cache. Edit Redis configuration **CommunityGrouping
 ![Untitled](images/Untitled%2018.png)
 
 ---
+
+## Person Delete To Community Group Endpoint
+
+### Request
+
+![Untitled](images/Untitled%2019.png)
+
+### Response
+
+![Untitled](images/Untitled%2020.png)
+
+# **COMMUNITY GROUP ENDPOINTS**
+
+## Community Group Get All Endpoint
+
+### Request
+
+![Untitled](images/Untitled%2021.png)
+
+### Response
+
+![Untitled](images/Untitled%2022.png)
+
+---
+
+## Community Group Add Endpoint
+
+### Request
+
+![Untitled](images/Untitled%2023.png)
+
+### Response
+
+![Untitled](images/Untitled%2024.png)
+
+---
+
+## Community Group Get By Id Endpoint
+
+### Request
+
+![Untitled](images/Untitled%2025.png)
+
+### Response
+
+![Untitled](images/Untitled%2026.png)
+
+---
+
+## Community Group Update Endpoint
+
+### Request
+
+![Untitled](images/Untitled%2027.png)
+
+### Response
+
+![Untitled](images/Untitled%2028.png)
+
+---
+
+## Community Group Delete Endpoint
+
+### Request
+
+![Untitled](images/Untitled%2029.png)
+
+### Response
+
+![Untitled](images/Untitled%2030.png)
+
+---
+
+## Community Group With People Endpoint
+
+### Request
+
+![Untitled](images/Untitled%2031.png)
+
+### Response
+
+![Untitled](images/Untitled%2032.png)
